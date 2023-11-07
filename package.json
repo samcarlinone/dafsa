@@ -1,0 +1,22 @@
+{
+  "name": "dafsa",
+  "version": "1.0.0",
+  "description": "DAFSA JS implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "DAFSA",
+    "DAWG",
+    "word",
+    "list",
+    "word",
+    "lookup"
+  ],
+  "author": "Sam Carlin",
+  "license": "MIT",
+  "dependencies": {
+    "dawg-lookup": "^2.2.1"
+  }
+}

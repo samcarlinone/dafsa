@@ -15,7 +15,7 @@ export function isWordInDafsa(word, dafsa) {
     if (!state) return false;
   }
 
-  return Boolean(state[TERMINAL_STATE]);
+  return Boolean(state[IS_TERMINAL_STATE]);
 }
 
 // JS Objects will iterate keys in insertion* order
@@ -25,8 +25,8 @@ export function isWordInDafsa(word, dafsa) {
 
 let lastMessage = performance.now();
 
-export const TERMINAL_STATE = Symbol('terminalState');
-const STATE_INDEX = Symbol('stateIndex');
+export const IS_TERMINAL_STATE = Symbol('terminalState');
+export const STATE_INDEX = Symbol('stateIndex');
 
 /**
  * Turn a sorted list of words into an object based DAFSA representation
@@ -91,11 +91,11 @@ function addSuffix(state, suffix, counter) {
     currentState = newState;
   }
 
-  currentState[TERMINAL_STATE] = true;
+  currentState[IS_TERMINAL_STATE] = true;
 }
 
 function getRegisterKey(state) {
-  return (state[TERMINAL_STATE] ? '1' : '0') + Object.entries(state).map(([label, state]) => label + state[STATE_INDEX]).join('');
+  return (state[IS_TERMINAL_STATE] ? '1' : '0') + Object.entries(state).map(([label, child]) => label + child[STATE_INDEX]).join('');
 }
 
 function replaceOrRegister(state, register) {
@@ -103,13 +103,13 @@ function replaceOrRegister(state, register) {
 
   if (hasChildren(child)) replaceOrRegister(child, register);
 
-  const stateKey = getRegisterKey(state);
+  const stateKey = getRegisterKey(child);
   const existingState = register.get(stateKey);
 
   if (existingState) {
     replaceLastChild(state, existingState);
   } else {
-    register.set(stateKey, state);
+    register.set(stateKey, child);
   }
 }
 
